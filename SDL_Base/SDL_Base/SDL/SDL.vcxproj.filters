@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\SCENES">
+      <UniqueIdentifier>{13a1a55b-cea4-4ecf-bf34-065fdfb44787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SCENES">
+      <UniqueIdentifier>{1d73b3c3-8d11-43f8-85db-615d1a8f0a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OBJECTS">
+      <UniqueIdentifier>{82d33366-7776-4687-a8e1-69827c9533df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\OBJECTS">
+      <UniqueIdentifier>{6224f1dd-51e2-4bef-99d1-3d4b873f533d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine.h">
@@ -21,17 +33,26 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlayScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HighScoresScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayScene.h">
+      <Filter>Header Files\SCENES</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoresScene.h">
+      <Filter>Header Files\SCENES</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Header Files\SCENES</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShip.h">
+      <Filter>Header Files\OBJECTS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,14 +65,20 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GamePlayScene.cpp">
+    <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayScene.cpp">
+      <Filter>Source Files\SCENES</Filter>
     </ClCompile>
     <ClCompile Include="HighScoresScene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SCENES</Filter>
     </ClCompile>
     <ClCompile Include="MenuScene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SCENES</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShip.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

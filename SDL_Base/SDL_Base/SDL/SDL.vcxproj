@@ -23,16 +23,21 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="HighScoresScene.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />
     <ClCompile Include="HighScoresScene.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\asteroids_spritesheet.png" />

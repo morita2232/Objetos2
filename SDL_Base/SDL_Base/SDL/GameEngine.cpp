@@ -1,5 +1,6 @@
 #include "GameEngine.h"
 #include "GameObject.h"
+#include "InputManager.h"
 
 
 GameEngine::GameEngine(int windowWidth, int windowHeight) {
@@ -8,10 +9,6 @@ GameEngine::GameEngine(int windowWidth, int windowHeight) {
 }
 
 void GameEngine::Updater() {
-
-	bool quitGame = false;
-
-	GameObject object(renderer);
 
 	float dt = 0.0f;
 	float lastTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
@@ -29,24 +26,14 @@ void GameEngine::Updater() {
 
 	currentScene->Start(renderer);
 
-	while (!quitGame) {
+	while (!IM.GetQuit()) {
 	
+		IM.Listen();
+
 		float currentTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
 		dt += currentTime - lastTime;
 
-		if (dt > frameTime) {
-
-			SDL_Event e;
-
-			while (SDL_PollEvent(&e) != 0) {
-
-				if (e.type == SDL_QUIT) {
-
-					quitGame = true;
-
-				}
-
-			}
+		if (dt > frameTime) {			
 
 			currentScene->Update(dt);
 

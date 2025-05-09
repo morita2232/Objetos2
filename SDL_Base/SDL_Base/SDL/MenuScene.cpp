@@ -1,11 +1,12 @@
 #include "MenuScene.h"
+#include "SpaceShip.h"
 
-
+			  //ESTO EN GAMEPLAY
 void MenuScene::Start(SDL_Renderer* rend) {
 
 	Scene::Start(rend);
 
-	objects.push_back(new GameObject(rend));
+	objects.push_back(new SpaceShip(rend));
 
 }
 
