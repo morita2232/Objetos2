@@ -22,7 +22,7 @@ void GameEngine::Updater() {
 	gameScene["HighScores"] = new HighScoresScene();
 	gameScene["GamePlay"] = new GamePlayScene();
 
-	Scene* currentScene = gameScene["GamePlay"];
+	Scene* currentScene = gameScene["MainMenu"];
 
 	currentScene->Start(renderer);
 

@@ -81,6 +81,13 @@ void UIText::Render(SDL_Renderer* rend) {
 
 void UIText::SetText(std::string newText, SDL_Renderer* rend) {
 
+	if (texture) {
+		SDL_DestroyTexture(texture);
+		texture = nullptr;
+	}
 
+	text = newText;
+
+	GenerateTexture(rend);
 
 }

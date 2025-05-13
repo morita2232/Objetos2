@@ -1,11 +1,12 @@
 #include "GamePlayScene.h"
+#include "SpaceShip.h"
 								  //ESTO EN MENU
 
 void GamePlayScene::Start(SDL_Renderer* rend) {
 
 	Scene::Start(rend);
 
-	textObjects.push_back(new UIText(rend, Vector2(250, 250), Vector2(1.f, 1.f), 0.0f, "ASTEROIDS"));
+	objects.push_back(new SpaceShip(rend, 3.f, 2.f, 5.f, 1.f));
 
 }
 
@@ -19,14 +20,14 @@ void GamePlayScene::Render(SDL_Renderer* rend) {
 
 	Scene::Render(rend);
 
-	if (!textObjects.empty()) {
-		textObjects[0]->Render(rend);
-	}
-
 }
 
 void GamePlayScene::Exit() {
 
+	for (int i = 0; i < objects.size(); i++) {
+		delete(objects[i]);
+	}
 
+	objects.clear();
 
 }
