@@ -6,7 +6,7 @@ void GamePlayScene::Start(SDL_Renderer* rend) {
 
 	Scene::Start(rend);
 
-	objects.push_back(new SpaceShip(rend, 3.f, 2.f, 5.f, 1.f));
+	objects.push_back(new SpaceShip(rend, &IM));
 
 }
 

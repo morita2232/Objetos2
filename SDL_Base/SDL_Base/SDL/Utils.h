@@ -13,6 +13,20 @@ public:
 		return Vector2(x + other.x, y + other.y);
 	}
 
+	Vector2 operator *(float other)  {
+		return Vector2(x * other, y * other);
+	}
+	
+	Vector2 operator *(Vector2& other) const {
+		return Vector2(x * other.x, y * other.y);
+	}
+	
+	Vector2& operator +=(const Vector2& other) {
+		x += other.x;
+		y += other.y;
+		return *this;
+	}
+
 };
 
 class Vector2Int {

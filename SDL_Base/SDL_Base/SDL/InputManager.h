@@ -36,7 +36,16 @@ public:
 
 	bool GetLeftClick() { return leftClick; }
 
-	bool GetKey(Sint32 key, KeyState state) { return keys[key] == state; }
+	//bool GetKey(Sint32 key, KeyState state) { return keys[key] == state; }
+
+	bool GetKey(Sint32 key, KeyState state) {
+		auto it = keys.find(key);
+		if (it != keys.end()) {
+			return it->second == state;
+		}
+		return false;
+	}
+
 
 	void Listen();
 

@@ -1,17 +1,26 @@
 #pragma once
 #include "GameObject.h"
+#include "InputManager.h"
+#include <cmath>
 
 class SpaceShip : public GameObject {
 private:
 
-	float linealVelocity;
+	Vector2 velocity;
+	Vector2 acceleration;
+	Vector2 direction;
+
 	float angularVelocity;
-	float velocity;
-	float acceleration;
+	float linearDrag;
+	float angularDrag;
+	float maxSpeed;
+	float accelerationFactor;
+
+	InputManager* input;
 
 public:
 
-	SpaceShip(SDL_Renderer* renderer, float _linealVelocity, float _angularVelocity, float _velocity, float _acceleration);
+	SpaceShip(SDL_Renderer* renderer, InputManager* inputManager);
 
 	void Update(float dt) override;
 
