@@ -3,11 +3,13 @@
 #include <vector>
 #include <string>
 #include "GameObject.h"
+#include "UIText.h"
 
 class Scene {
 protected:
 
 	std::vector <GameObject*> objects;
+	std::vector <UIText*> textObjects;
 
 	std::string targetScene;
 	bool isFinished = true;

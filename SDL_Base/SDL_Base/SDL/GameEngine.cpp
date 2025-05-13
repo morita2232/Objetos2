@@ -22,7 +22,7 @@ void GameEngine::Updater() {
 	gameScene["HighScores"] = new HighScoresScene();
 	gameScene["GamePlay"] = new GamePlayScene();
 
-	Scene* currentScene = gameScene["MainMenu"];
+	Scene* currentScene = gameScene["GamePlay"];
 
 	currentScene->Start(renderer);
 
@@ -68,10 +68,12 @@ void GameEngine::Finish() {
 
 void GameEngine::InitSDL() {
 
-	int result = SDL_Init(SDL_INIT_VIDEO);
-
-	if (result < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "Error al inicializar el SDL: " << SDL_GetError();
+	}
+
+	if (TTF_Init() < 0) {
+		std::cout << "Error al inicializar el TTF: " << TTF_GetError();
 	}
 
 }
