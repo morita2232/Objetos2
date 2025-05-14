@@ -22,6 +22,10 @@ public:
 
 	SpaceShip(SDL_Renderer* renderer, InputManager* inputManager);
 
+	Vector2 GetPosition() const { return position; }
+	float GetRotation() const { return zRotation; }
+
+
 	void Update(float dt) override;
 
 };

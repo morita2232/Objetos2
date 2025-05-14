@@ -1,7 +1,5 @@
 #include "MenuScene.h"
 
-
-			  //ESTO EN GAMEPLAY
 void MenuScene::Start(SDL_Renderer* rend) {
 
 	Scene::Start(rend);

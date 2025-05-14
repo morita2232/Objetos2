@@ -57,6 +57,9 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files\SCENES</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\OBJECTS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="UIText.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
