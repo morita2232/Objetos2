@@ -29,7 +29,15 @@ void GameObject::Render(SDL_Renderer* renderer) {
 
 	SDL_Rect source{ textureCoor.x, textureCoor.y, sizeToClamp.x, sizeToClamp.y };
 	
-	SDL_Rect destination{ position.x, position.y, (source.w * scale.x), (source.h * scale.y) };
+	//SDL_Rect destination{ position.x, position.y, (source.w * scale.x), (source.h * scale.y) };
+
+	SDL_Rect destination{
+		static_cast<int>(position.x),
+		static_cast<int>(position.y),
+		static_cast<int>(source.w * scale.x),
+		static_cast<int>(source.h * scale.y)
+	};
+
 
 	//SDL_RenderCopy(renderer, texture, &source, &destination);
 

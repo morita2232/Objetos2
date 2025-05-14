@@ -66,8 +66,6 @@ void InputManager::Listen() {
 	}
 
 }*/
-#include "InputManager.h"
-#include <iostream>
 
 /*
 void InputManager::Listen() {
@@ -111,6 +109,8 @@ void InputManager::Listen() {
 	}
 
 }*/
+#include "InputManager.h"
+#include <iostream>
 
 void InputManager::Listen() {
 	SDL_GetMouseState(&mousePos.x, &mousePos.y);

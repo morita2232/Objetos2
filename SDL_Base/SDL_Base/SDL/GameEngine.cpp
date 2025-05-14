@@ -11,7 +11,7 @@ GameEngine::GameEngine(int windowWidth, int windowHeight) {
 void GameEngine::Updater() {
 
 	float dt = 0.0f;
-	float lastTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
+	//float lastTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
 
 	const int FPS = 60;
 	const float frameTime = 1.0f/(float)FPS;
@@ -26,6 +26,32 @@ void GameEngine::Updater() {
 
 	currentScene->Start(renderer);
 
+	float lastTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
+
+	while (!IM.GetQuit()) {
+		IM.Listen();
+
+		float currentTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
+		float dt = currentTime - lastTime;
+		lastTime = currentTime;
+
+		currentScene->Update(dt);
+
+		SDL_SetRenderDrawColor(renderer, 76, 0, 153, 1);
+		SDL_RenderClear(renderer);
+		currentScene->Render(renderer);
+		SDL_RenderPresent(renderer);
+
+		if (currentScene->IsFinished()) {
+			currentScene->Exit();
+			currentScene = gameScene[currentScene->GetTargetScene()];
+			currentScene->Start(renderer);
+		}
+	}
+
+
+
+		  /*
 	while (!IM.GetQuit()) {
 	
 		IM.Listen();
@@ -56,6 +82,7 @@ void GameEngine::Updater() {
 
 		}
 	}
+		   */
 
 }
 

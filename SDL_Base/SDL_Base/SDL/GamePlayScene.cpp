@@ -4,6 +4,8 @@
 
 void GamePlayScene::Start(SDL_Renderer* rend) {
 
+	printf("CREANDO NAVE\n");
+
 	Scene::Start(rend);
 
 	objects.push_back(new SpaceShip(rend, &IM));
