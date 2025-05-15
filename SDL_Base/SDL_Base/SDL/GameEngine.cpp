@@ -11,13 +11,13 @@ GameEngine::GameEngine(int windowWidth, int windowHeight) {
 void GameEngine::Updater() {
 
 	//Tiempo entre frames
-	float dt = 0.0f;	
+	float dt = NULL;	
 
 	//Fotogramas por segundo
-	const int FPS = 60;
+	int FPS = FPSNUM;
 
 	//Tiempo por fotogramas
-	const float frameTime = 1.0f/(float)FPS;
+	const float frameTime = FTNUM/(float)FPS;
 
 	//Mapa de escenas
 	std::map<std::string, Scene*> gameScene;

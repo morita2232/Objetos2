@@ -1,5 +1,17 @@
 #pragma once
 
+#define FPSNUM 60
+#define FTNUM 1.0f
+#define HALF 2.f
+#define NINENTYDGS 90.0f
+#define ONEEIGHTYDGS 180.0f
+#define PROJECTILEWANDH 6
+#define SCREENW 800.0f
+#define SCREENH 600.0f
+#define SCREENLIMIT 10
+#define ANGULARSPD 540.0f
+#define COOLDOWN 0.2f
+
 class Vector2 {
 
 public:

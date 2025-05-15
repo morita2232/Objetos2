@@ -12,10 +12,10 @@ private:
 	SDL_Renderer* renderer;
 
 	//Tiempo minimo entre disparos
-	float shootCooldown = 0.2f;
+	float shootCooldown = COOLDOWN;
 
 	//Control de cuando se puede volver a disparar
-	float shootTimer = 0.0f;
+	float shootTimer = NULL;
 
 
 public:

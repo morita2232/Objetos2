@@ -30,11 +30,11 @@ SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(
 void SpaceShip::Update(float dt) {
 
 	//Constantes de pantalla para el wraparound
-	const float SCREEN_WIDTH = 800.0f;
-	const float SCREEN_HEIGHT = 600.0f;
+	const float SCREEN_WIDTH = SCREENW;
+	const float SCREEN_HEIGHT = SCREENH;
 
 	//Calcular dirección desde la rotación
-	float radians = (zRotation - 90.0f) * (M_PI / 180.0f);
+	float radians = (zRotation - NINENTYDGS) * (M_PI / ONEEIGHTYDGS);
 	direction = Vector2(cos(radians), sin(radians));
 
 
@@ -47,7 +47,7 @@ void SpaceShip::Update(float dt) {
 	velocity = velocity * pow(linearDrag, dt);
 
 	//Aplicar rotación si están la flecha izquierda o derecha presionadas
-	float angularSpeed = 540.f;
+	float angularSpeed = ANGULARSPD;
 
 	if (input->GetKey(SDLK_RIGHT, HOLD)) {
 		angularVelocity += angularSpeed * dt;
@@ -63,7 +63,7 @@ void SpaceShip::Update(float dt) {
 	}
 
 	//Limitar rotacion maxima
-	const float maxAngularVelocity = 180.f;
+	const float maxAngularVelocity = ONEEIGHTYDGS;
 	if (angularVelocity > maxAngularVelocity)
 		angularVelocity = maxAngularVelocity;
 	else if (angularVelocity < -maxAngularVelocity)

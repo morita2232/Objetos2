@@ -19,8 +19,8 @@ UIText::UIText(SDL_Renderer* rend, Vector2 pos, Vector2 initiScale, float initZR
 
 	//Ruta al archio de la fuente
 	fontPath = "resources/PixelPowerline-9xOK.ttf";
-	width = 0;
-	height = 0;
+	width = NULL;
+	height = NULL;
 
 	//Generacion de la textura
 	GenerateTexture(rend);
@@ -93,8 +93,8 @@ void UIText::Render(SDL_Renderer* rend) {
 
 	dest.w = width * scale.x;
 	dest.h = height * scale.y;
-	dest.x = position.x - (width / 2.f);
-	dest.y = position.y - (height / 2.f);
+	dest.x = position.x - (width / HALF);
+	dest.y = position.y - (height / HALF);
 
 	//Renderizacion de la textura con rotacion (si hay) y sin flip
 	SDL_RenderCopyEx(rend, texture, NULL, &dest, zRotation, NULL, SDL_FLIP_NONE);
