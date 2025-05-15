@@ -10,7 +10,11 @@
 class GameEngine {
 
 public:
+
+	//Puntero a la ventana
 	SDL_Window* window;
+
+	//Puntero al renderer
 	SDL_Renderer* renderer;
 
 	GameEngine(int windowWidth, int windowHeight);

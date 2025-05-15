@@ -6,14 +6,25 @@
 class SpaceShip : public GameObject {
 private:
 
+	//Velocidad actual de la nave
 	Vector2 velocity;
-	Vector2 acceleration;
+
+	//Direccion hacia donde apunta la nave
 	Vector2 direction;
 
+	//Velocidad de rotacion
 	float angularVelocity;
+
+	//Friccion que desacelera la nave progresivamente
 	float linearDrag;
+
+	//Friccion que desacelera la rotacion
 	float angularDrag;
+
+	//Limite de velocidad
 	float maxSpeed;
+
+	//Guarda cuanta aceleracion se aplica
 	float accelerationFactor;
 
 	InputManager* input;

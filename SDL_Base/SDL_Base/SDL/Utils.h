@@ -6,21 +6,26 @@ public:
 	float x;
 	float y;
 
+	//Constructores
 	Vector2() { x = 0; y = 0; }
 	Vector2(float _x, float _y) { x = _x; y = _y; }
 
+	//Operador de suma
 	Vector2 operator +(const Vector2& other) const {
 		return Vector2(x + other.x, y + other.y);
 	}
 
+	//Operador de multiplicacion escalar
 	Vector2 operator *(float other) const  {
 		return Vector2(x * other, y * other);
 	}
 	
+	//Operador de multiplicacion componente a componente
 	Vector2 operator *(Vector2& other) const {
 		return Vector2(x * other.x, y * other.y);
 	}
 	
+	//Operdador de suma acumulativa
 	Vector2& operator +=(const Vector2& other) {
 		x += other.x;
 		y += other.y;

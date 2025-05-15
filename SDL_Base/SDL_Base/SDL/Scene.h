@@ -8,10 +8,16 @@
 class Scene {
 protected:
 
+	//Lista de objetos en escena
 	std::vector <GameObject*> objects;
+
+	//Lista de objetos de texto
 	std::vector <UIText*> textObjects;
 
+	//Nombre de la escena
 	std::string targetScene;
+
+	//Indica si la escena ha acabdo
 	bool isFinished = true;
 
 public:
@@ -23,7 +29,7 @@ public:
 	}
 
 	virtual void Update(float dt) {
-
+		//Actualiza los objetos en escena
 		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->Update(dt);
 		}
@@ -31,7 +37,7 @@ public:
 	}
 
 	virtual void Render(SDL_Renderer* rend) {
-
+		//Renderiza los objetos
 		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->Render(rend);
 		}

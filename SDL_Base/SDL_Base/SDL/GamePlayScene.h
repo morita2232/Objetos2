@@ -5,12 +5,17 @@
 class GamePlayScene : public Scene {
 private:
 
+	//Lista de las balas
 	std::vector<Projectile*> projectiles;
+
+	//Puntero al renderer
 	SDL_Renderer* renderer;
+
+	//Tiempo minimo entre disparos
 	float shootCooldown = 0.2f;
+
+	//Control de cuando se puede volver a disparar
 	float shootTimer = 0.0f;
-
-
 
 
 public:

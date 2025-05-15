@@ -3,7 +3,10 @@
 
 class Projectile : public GameObject {
 private:
+    //Velocidad y direccion del proyectil
     Vector2 velocity;
+
+    //Variable para saber si la bala esta viva o no
     bool isAlive = true;
 
 public:

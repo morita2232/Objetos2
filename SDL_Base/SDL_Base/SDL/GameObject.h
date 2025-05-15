@@ -7,13 +7,22 @@
 class GameObject {
 protected:
 
+	//Posicion del objeto
 	Vector2 position;
+
+	//Escala del objeto
 	Vector2 scale;
+
+	//Rotacion del objeto
 	float zRotation;
 
+	//Textura del objeto
 	SDL_Texture* texture;
 
+	//Coordenadas del sprite en el spritesheet
 	Vector2Int textureCoor;
+
+	//Tamaño del sprite a recortar
 	Vector2Int sizeToClamp;
 
 public:
