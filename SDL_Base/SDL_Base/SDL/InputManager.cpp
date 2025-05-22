@@ -36,6 +36,7 @@ void InputManager::Listen() {
 			if (e.button.button == SDL_BUTTON_LEFT)
 				leftClick = false;
 			break;
+
 		}
 	}
 	

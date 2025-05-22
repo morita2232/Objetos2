@@ -27,10 +27,10 @@ void GameEngine::Updater() {
 	gameScene["GamePlay"] = new GamePlayScene();
 
 	//Escena con la que se empieza
-	Scene* currentScene = gameScene["GamePlay"];
+	Scene* currentScene = gameScene["MainMenu"];
 
 	//Comienzo de la escena
-	currentScene->Start(renderer);
+	currentScene->Start(renderer, &IM);
 
 	//Calculacion del tiempo inicial para medir frames
 	float lastTime = (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency();
@@ -61,7 +61,7 @@ void GameEngine::Updater() {
 		if (currentScene->IsFinished()) {
 			currentScene->Exit();
 			currentScene = gameScene[currentScene->GetTargetScene()];
-			currentScene->Start(renderer);
+			currentScene->Start(renderer, &IM);
 		}
 	}		 
 

@@ -4,6 +4,7 @@
 #include <string>
 #include "GameObject.h"
 #include "UIText.h"
+#include "InputManager.h"
 
 class Scene {
 protected:
@@ -17,14 +18,17 @@ protected:
 	//Nombre de la escena
 	std::string targetScene;
 
+	InputManager* input;
+
 	//Indica si la escena ha acabdo
 	bool isFinished = true;
 
 public:
 
-	virtual void Start(SDL_Renderer* rend) {
+	virtual void Start(SDL_Renderer* rend, InputManager* inputManager) {
 
 		isFinished = false;
+		input = inputManager;
 
 	}
 

@@ -1,9 +1,9 @@
 #include "GamePlayScene.h"
 #include "SpaceShip.h"
 
-void GamePlayScene::Start(SDL_Renderer* rend) {
+void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 
-	Scene::Start(rend);
+	Scene::Start(rend, inputManager);
 
 	renderer = rend;
 
