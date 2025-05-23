@@ -60,6 +60,9 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\OBJECTS</Filter>
     </ClInclude>
+    <ClInclude Include="CreditsScene.h">
+      <Filter>Header Files\SCENES</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditsScene.cpp">
+      <Filter>Source Files\SCENES</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

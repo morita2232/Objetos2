@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "MenuScene.h"
 #include "HighScoresScene.h"
+#include "CreditsScene.h"
 #include "GamePlayScene.h"
 
 class GameEngine {

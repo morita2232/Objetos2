@@ -25,6 +25,7 @@ void GameEngine::Updater() {
 	gameScene["MainMenu"] = new MenuScene();
 	gameScene["HighScores"] = new HighScoresScene();
 	gameScene["GamePlay"] = new GamePlayScene();
+	gameScene["Credits"] = new CreditsScene();
 
 	//Escena con la que se empieza
 	Scene* currentScene = gameScene["MainMenu"];
