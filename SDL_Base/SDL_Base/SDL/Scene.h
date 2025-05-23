@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <vector>
 #include <string>
+#include "Utils.h"
 #include "GameObject.h"
 #include "UIText.h"
 #include "InputManager.h"

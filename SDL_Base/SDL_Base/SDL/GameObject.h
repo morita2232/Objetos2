@@ -25,11 +25,15 @@ protected:
 	//Tamaño del sprite a recortar
 	Vector2Int sizeToClamp;
 
+	SDL_Rect destination;
+
 public:
 
 	GameObject(SDL_Renderer* renderer, Vector2Int* _textureCoor, Vector2Int* _sizeToClamp);
 
 	virtual void Update(float dt) = 0;
 	virtual void Render(SDL_Renderer* renderer);
+
+	void Collider();
 
 };

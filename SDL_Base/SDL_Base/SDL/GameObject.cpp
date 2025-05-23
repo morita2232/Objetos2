@@ -43,7 +43,7 @@ void GameObject::Render(SDL_Renderer* renderer) {
 	SDL_Rect source{ textureCoor.x, textureCoor.y, sizeToClamp.x, sizeToClamp.y };		
 
 	//Destino donse se dibujara en pantalla
-	SDL_Rect destination{
+	 destination = {
 		(int)(position.x),
 		(int)(position.y),
 		(int)(source.w * scale.x),
@@ -52,5 +52,17 @@ void GameObject::Render(SDL_Renderer* renderer) {
 
 	//Renderizacion
 	SDL_RenderCopyEx(renderer, texture, &source, &destination, zRotation, NULL, SDL_FLIP_NONE);
+
+}
+
+void GameObject::Collider() {
+
+
+	destination = {
+		(int)(position.x / 2),
+		(int)(position.y / 2),
+		(int)(position.x + 5),
+		(int)(position.y + 10)
+	};
 
 }
