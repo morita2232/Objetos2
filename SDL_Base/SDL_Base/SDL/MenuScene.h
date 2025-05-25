@@ -4,7 +4,7 @@
 class MenuScene : public Scene {
 
 public:
-
+	SDL_Renderer* renderer;
 
 	void Start(SDL_Renderer* rend, InputManager* inputManager) override;
 	void Update(float dt) override;

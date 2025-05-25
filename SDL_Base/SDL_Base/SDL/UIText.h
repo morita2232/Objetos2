@@ -56,5 +56,9 @@ public:
 
 	void SetText(std::string newText, SDL_Renderer* rend);
 
+	std::string GetText() const { return text; }
+
+	SDL_Rect GetCollider() const;
+
 
 };

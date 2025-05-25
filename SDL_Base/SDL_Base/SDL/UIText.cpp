@@ -115,3 +115,16 @@ void UIText::SetText(std::string newText, SDL_Renderer* rend) {
 	GenerateTexture(rend);
 
 }
+
+SDL_Rect UIText::GetCollider() const {
+
+	SDL_Rect rect;
+
+	rect.w = width * scale.x;
+	rect.h = height * scale.y;
+	rect.x = position.x - (rect.w / 2.f);
+	rect.y = position.y - (rect.h / 2.f);
+
+	return rect;
+
+}

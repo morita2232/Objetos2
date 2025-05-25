@@ -4,12 +4,14 @@ void MenuScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 
 	Scene::Start(rend, inputManager);
 
+	renderer = rend;
+
 	//Se añade un objeto de texto centrado con el titulo
 	textObjects.push_back(new UIText(rend, Vector2(175, 40), Vector2(2.f, 2.f), 0.0f, "ASTEROIDS"));
 	textObjects.push_back(new UIText(rend, Vector2(100, 150), Vector2(1.f, 1.f), 0.0f, "1 - Play", 20));
 	textObjects.push_back(new UIText(rend, Vector2(115, 185), Vector2(1.f, 1.f), 0.0f, "2 - Credits", 20));
 	textObjects.push_back(new UIText(rend, Vector2(143, 220), Vector2(1.f, 1.f), 0.0f, "3 - High Scores", 20));
-	textObjects.push_back(new UIText(rend, Vector2(143, 125), Vector2(1.f, 1.f), 0.0f, ".", 20));
+	//textObjects.push_back(new UIText(rend, Vector2(143, 125), Vector2(1.f, 1.f), 0.0f, ".", 20));
 
 }
 
@@ -17,17 +19,39 @@ void MenuScene::Update(float dt) {
 
 	Scene::Update(dt);
 
-	for (int i = 0; i < textObjects.size(); i++) {
+	SDL_Point mouse = { input->GetMousePos().x, input->GetMousePos().y };
 
-		if(input->GetMousePos() == textObjects[i].)
+	for (UIText* text : textObjects) {
+		SDL_Rect collider = text->GetCollider();
 
+		if(text->GetText() != "ASTEROIDS"){
+		if (SDL_PointInRect(&mouse, &collider)) {
+			// Solo añadir ">>" si aún no lo tiene
+			if (text->GetText().rfind(">> ", 0) != 0) {
+				text->SetText(">> " + text->GetText(), renderer);
+			}
+
+			// Detectar clic
+			if (input->GetLeftClick()) {
+				targetScene = "GamePlay"; // Aquí deberías comprobar cuál texto es
+				isFinished = true;
+			}
+		}
+		else {
+			// Si ya tenía ">>", lo quitamos
+			if (text->GetText().rfind(">> ", 0) == 0) {
+				std::string cleanText = text->GetText().substr(3); // Elimina ">> "
+				text->SetText(cleanText, renderer);
+			}
+		}
+	}
 	}
 
-	if (input->GetMousePos().x >= 50 && input->GetMousePos().x <= 150 && input->GetMousePos().y >= 125 && input->GetMousePos().y <= 160 && input->GetLeftClick() == true) {
+	/*if (input->GetMousePos().x >= 50 && input->GetMousePos().x <= 150 && input->GetMousePos().y >= 125 && input->GetMousePos().y <= 160 && input->GetLeftClick() == true) {
 //		std::cout << "Pito" << std::endl;
 		targetScene = "GamePlay";
 		isFinished = true;
-	}
+	}*/
 
 	if (input->GetKey(SDLK_1, HOLD)) {
 
