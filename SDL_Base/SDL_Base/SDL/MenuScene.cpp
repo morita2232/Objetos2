@@ -32,8 +32,13 @@ void MenuScene::Update(float dt) {
 			}
 
 			// Detectar clic
-			if (input->GetLeftClick()) {
+			if (input->GetLeftClick() && text->GetText() == ">> 1 - Play") {
 				targetScene = "GamePlay"; // Aquí deberías comprobar cuál texto es
+				isFinished = true;
+			}
+			
+			if (input->GetLeftClick() && text->GetText() == ">> 2 - Credits") {
+				targetScene = "Credits"; // Aquí deberías comprobar cuál texto es
 				isFinished = true;
 			}
 		}

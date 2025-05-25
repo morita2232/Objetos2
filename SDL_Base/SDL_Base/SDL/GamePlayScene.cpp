@@ -10,6 +10,10 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	//Creacion de una nave
 	objects.push_back(new SpaceShip(rend, &IM));
 
+	textObjects.push_back(new UIText(rend, Vector2(100, 40), Vector2(1.f, 1.f), 0.0f, "SCORE: 0"));
+
+	SpawnAsteroids(5);
+
 }
 
 void GamePlayScene::Update(float dt) {
@@ -56,6 +60,17 @@ void GamePlayScene::Update(float dt) {
 		}
 	}
 
+	for (int i = 0; i < asteroids.size(); ) {
+		if (!asteroids[i]->IsAlive()) {
+			delete asteroids[i];
+			asteroids.erase(asteroids.begin() + i);
+		}
+		else {
+			asteroids[i]->Update(dt);
+			++i;
+		}
+	}
+
 
 }
 
@@ -68,7 +83,29 @@ void GamePlayScene::Render(SDL_Renderer* rend) {
 		(*it)->Render(rend);
 	}
 
+	for (Asteroid* a : asteroids) {
+		a->Render(renderer);
+	}
 
+	//Si textObjects esta vacio coge este valor para que no este vacia la pantalla
+	if (textObjects.empty()) {
+		textObjects[0]->SetText("NO HAY TEXTO", rend);
+		textObjects[0]->Render(rend);
+	}
+	else {
+		for (int i = 0; i < textObjects.size(); i++) {
+			textObjects[i]->Render(rend);
+		}
+	}
+
+}
+
+void GamePlayScene::SpawnAsteroids(int count) {
+	for (int i = 0; i < count; ++i) {
+		Vector2 pos(rand() % (int)SCREENW, rand() % (int)SCREENH);
+		Vector2 vel((rand() % 100 - 50), (rand() % 100 - 50));
+		asteroids.push_back(new Asteroid(renderer, BIG, pos, vel));
+	}
 }
 
 void GamePlayScene::Exit() {

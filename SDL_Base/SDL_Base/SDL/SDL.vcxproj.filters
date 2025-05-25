@@ -63,6 +63,9 @@
     <ClInclude Include="CreditsScene.h">
       <Filter>Header Files\SCENES</Filter>
     </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>Header Files\OBJECTS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="CreditsScene.cpp">
       <Filter>Source Files\SCENES</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
