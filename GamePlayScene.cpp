@@ -6,7 +6,6 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	Scene::Start(rend, inputManager);
 
 	// Reinicio de estado
-
 	for (UIText* txt : textObjects) {
 		delete txt;
 	}
@@ -16,10 +15,14 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	gameOver = false;
 	score = 0;
 
+	//Dejamos todos los vectores preparados y vacios para empezar
 	for (Projectile* p : projectiles) delete p;
 	projectiles.clear();
 
 	for (Asteroid* a : asteroids) delete a;
+	asteroids.clear();
+
+	for (EnemyShip* e : enemyShips) delete e;
 	asteroids.clear();
 
 	renderer = rend;
@@ -27,8 +30,9 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	//Creacion de una nave
 	objects.push_back(new SpaceShip(rend, &IM));
 
+	//Textos de inicio
 	textObjects.push_back(new UIText(rend, Vector2(100, 40), Vector2(1.f, 1.f), 0.0f, "SCORE: 0"));
-	textObjects.push_back(new UIText(rend, Vector2(90, 70), Vector2(1.f, 1.f), 0.0f, "PRESS ARROW KEY TO START"));
+	textObjects.push_back(new UIText(rend, Vector2(255, 70), Vector2(1.f, 1.f), 0.0f, "PRESS ARROW KEY TO START"));
 }
 
 
@@ -44,6 +48,28 @@ void GamePlayScene::Update(float dt) {
 		}
 		started = true;
 		SpawnAsteroids(5);
+	}
+
+	// ENEMY SPACE SHIP SPAWN:
+	// Si el juego ha empezado y no ha finalizado - if
+	if (started && !gameOver) {
+		//Empieza la cuenta para el spawner
+		enemySpawnTimer += dt;
+
+		//Ha llegado al tiempo indicado - if
+		if (enemySpawnTimer >= enemySpawnInterval) {
+
+			// Posicion de spawn random entre las dimensiones del mapa
+			float randScreenW = rand() % (int)SCREENW;
+			float randScreenH = rand() % (int)SCREENH;
+			Vector2 spawnPos(randScreenW, randScreenH);
+
+			// Se anade nuevo enemigo en vector con dicha pos random
+			enemyShips.push_back(new EnemyShip(renderer, spawnPos));
+
+			//Se reinicia el temporizador para que se vuelva a producir el loop
+			enemySpawnTimer = 0.0f;
+		}
 	}
 
 	//Actualizacion del temporizador de disparo
@@ -93,13 +119,31 @@ void GamePlayScene::Update(float dt) {
 		}
 	}
 
+	// ENEMY SHIP UPDATE and KILL:
+	//Por cada enemyShip en vector - for
+	for (int i = 0; i < enemyShips.size(); ) {
+
+		//Checkea si estan vivos o no, si NO estan vivos, se borran, esto hara que no haya memory leaks.
+		EnemyShip* enemy = enemyShips[i];
+		if (!enemy->IsAlive()) {
+			delete enemy;
+			enemyShips.erase(enemyShips.begin() + i);
+		}
+		//Si estan vivos simplemente actualiza dichos enemigos por deltatime  - Update(dt)
+		else {
+			enemy->Update(dt);
+			++i;
+		}
+	}
+
 	// Colisión entre balas y asteroides
 	for (auto p = projectiles.begin(); p != projectiles.end(); ) {
 		bool projectileUsed = false;
+		SDL_Rect r1 = { (int)(*p)->GetPosition().x, (int)(*p)->GetPosition().y, 8, 8 };
 
+		// ASTEROIDES
 		for (auto a = asteroids.begin(); a != asteroids.end(); ++a) {
 			if ((*a)->IsAlive() && (*p)->IsAlive()) {
-				SDL_Rect r1 = { (int)(*p)->GetPosition().x, (int)(*p)->GetPosition().y, 8, 8 };
 				SDL_Rect r2 = (*a)->GetCollider(); // Te explico abajo cómo crearlo
 
 				if (SDL_HasIntersection(&r1, &r2)) {
@@ -122,6 +166,29 @@ void GamePlayScene::Update(float dt) {
 			}
 		}
 
+		// ENEMY SHIPS
+		for (auto e = enemyShips.begin(); e != enemyShips.end(); ++e) {
+			//Si enemyShip sigue vivo - if
+			if ((*e)->IsAlive()) {
+				// Coge su collider
+				SDL_Rect r3 = (*e)->GetCollider();
+
+				//Si este tiene una colision con una bala del jugador
+				if (SDL_HasIntersection(&r1, &r3)) {
+					// Destruir enemyShip y bala
+					(*p)->Kill();
+					(*e)->Kill();
+					projectileUsed = true;
+
+					//Se actualiza score (+150 puntos!)
+					score += 150;
+					textObjects[0]->SetText("SCORE: " + std::to_string(score), renderer);
+					break;
+				}
+			}
+		}
+
+		//Si se ha usado la bala se destruye:
 		if (projectileUsed) {
 			delete* p;
 			p = projectiles.erase(p);
@@ -152,6 +219,52 @@ void GamePlayScene::Update(float dt) {
 		}
 	}
 
+	// ENEMY SHIP VS ELEMENTOS DEL MAPA
+	//Por cada enemyShip vivo del vector - for
+	for (EnemyShip* enemy : enemyShips) {
+		if (!enemy->IsAlive()) continue;
+
+		// ENEMY VS ASTEROID
+		//Por cada asteroide vivo del vector - for
+		for (Asteroid* a : asteroids) {
+			if (!a->IsAlive()) continue;
+
+			SDL_Rect enemyRect = enemy->GetCollider();
+			SDL_Rect asteroidRect = a->GetCollider();
+
+			//Si se tiene colision se destruyen ambos
+			if (SDL_HasIntersection(&enemyRect, &asteroidRect)) {
+				enemy->Kill();
+				a->Destroy();
+				break;
+			}
+		}
+
+		// SHIP VS ENEMY
+		//Por cada objeto vivo del vector - for
+		for (GameObject* obj : objects) {
+			//Cogemos nuestra nave como objeto
+			SpaceShip* ship = dynamic_cast<SpaceShip*>(obj);
+
+			//Si esta viva y tiene interaccion con el EnemyShip, ambos se destruyen y se muestra un mensaje de GAMEOVER
+			if (ship && ship->IsAlive()) {
+
+				//Cogemos sus coliders
+				SDL_Rect enemyRect = enemy->GetCollider();
+				SDL_Rect shipRect = ship->GetCollider();
+
+				//Comprobamos si han chocado y si es asi, ambos mueren y sale mensaje de gameOver
+				if (SDL_HasIntersection(&enemyRect, &shipRect)) {
+					ship->Kill();
+					enemy->Kill();
+					gameOver = true;
+					textObjects.push_back(new UIText(renderer, Vector2(140, 200), Vector2(1.5f, 1.5f), 0.0f, "YOU LOSE"));
+					textObjects.push_back(new UIText(renderer, Vector2(100, 240), Vector2(1.f, 1.f), 0.0f, "PRESS R TO RETURN"));
+				}
+			}
+		}
+	}
+
 	//Actualizacion de punuaciones 
 	for (int i = 0; i < objects.size(); ++i) {
 		SpaceShip* ship = dynamic_cast<SpaceShip*>(objects[i]);
@@ -178,8 +291,14 @@ void GamePlayScene::Render(SDL_Renderer* rend) {
 		(*it)->Render(rend);
 	}
 
+	// ASTEROIDS
 	for (Asteroid* a : asteroids) {
 		a->Render(renderer);
+	}
+
+	// ENEMY SHIP
+	for (EnemyShip* e : enemyShips) {
+		e->Render(renderer);
 	}
 
 	//Si textObjects esta vacio coge este valor para que no este vacia la pantalla
@@ -211,21 +330,24 @@ void GamePlayScene::SpawnAsteroids(int count) {
 
 void GamePlayScene::Exit() {
 
-	//Liberacion de memoria
-	for (int i = 0; i < objects.size(); i++) {
-		delete(objects[i]);
-	}
-	objects.clear();
-
 	//Liberacion de memoria de balas
 	for (int i = 0; i < projectiles.size(); ++i) {
 		delete projectiles[i];
 	}
 	projectiles.clear();
 
-	asteroids.clear();
+	//Liberacion de memoria de objetos
+	for (int i = 0; i < objects.size(); i++) {
+		delete(objects[i]);
+	}
+	objects.clear();
+
+	//Liberaciond e memoria de enemyShips
+	for (EnemyShip* e : enemyShips) {
+		delete e;
+	}
+
 	projectiles.clear();
+	asteroids.clear();
+	enemyShips.clear();
 }
-
-
-

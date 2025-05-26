@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Projectile.h"
 #include "Asteroid.h"
+#include "EnemyShip.h"
 
 class GamePlayScene : public Scene {
 private:
@@ -20,6 +21,13 @@ private:
 
 	std::vector<Asteroid*> asteroids;
 
+	// Para la creacion de los EnemyShips, anado un vector de estos
+	std::vector<EnemyShip*> enemyShips;
+	// Temporizador para saber cuanto tardará en spawnear otro enemyShip
+	float enemySpawnTimer = 0.0f;
+	float enemySpawnInterval = 15.0f;
+
+	//Para la puntuacion
 	int score = 0;
 	bool started = false;
 	bool gameOver = false;
