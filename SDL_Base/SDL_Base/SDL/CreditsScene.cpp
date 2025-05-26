@@ -8,6 +8,7 @@ void CreditsScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	textObjects.push_back(new UIText(rend, Vector2(190, 40), Vector2(2.f, 2.f), 0.0f, "CREDITS"));
 	textObjects.push_back(new UIText(rend, Vector2(250, 150), Vector2(1.f, 1.f), 0.0f, "Sebastian Mora"));
 	textObjects.push_back(new UIText(rend, Vector2(250, 190), Vector2(1.f, 1.f), 0.0f, "Lucia Puga"));
+	textObjects.push_back(new UIText(rend, Vector2(250, 230), Vector2(1.f, 1.f), 0.0f, "Sam Corchero"));
 	textObjects.push_back(new UIText(rend, Vector2(165, 470), Vector2(1.f, 1.f), 0.0f, "PRESS R TO RETURN"));
 
 }
