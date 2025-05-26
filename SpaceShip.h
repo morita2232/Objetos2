@@ -35,7 +35,14 @@ public:
 
 	Vector2 GetPosition() const { return position; }
 	float GetRotation() const { return zRotation; }
-
+	SDL_Rect GetCollider() const {
+		return SDL_Rect{
+			(int)(position.x),
+			(int)(position.y),
+			sizeToClamp.x,
+			sizeToClamp.y
+		};
+	}
 
 	void Update(float dt) override;
 

@@ -13,14 +13,16 @@
 #define COOLDOWN 0.2f
 
 class Vector2 {
-
 public:
 	float x;
 	float y;
 
-	//Constructores
-	Vector2() { x = 0; y = 0; }
-	Vector2(float _x, float _y) { x = _x; y = _y; }
+	Vector2() : x(0), y(0) {}
+	Vector2(float _x, float _y) : x(_x), y(_y) {}
+
+	float Magnitude() const {
+		return sqrt(x * x + y * y);
+	}
 
 	//Operador de suma
 	Vector2 operator +(const Vector2& other) const {
@@ -43,6 +45,12 @@ public:
 		y += other.y;
 		return *this;
 	}
+
+	//Operador de resta
+	Vector2 operator-(const Vector2& other) const {
+		return Vector2(x - other.x, y - other.y);
+	}
+
 
 };
 

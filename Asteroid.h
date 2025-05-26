@@ -17,6 +17,14 @@ public:
 
 	bool IsAlive() const { return isAlive; }
 	AsteroidSize GetSize() const { return size; }
+	SDL_Rect GetCollider() const {
+		return SDL_Rect{
+			(int)(position.x),
+			(int)(position.y),
+			sizeToClamp.x,
+			sizeToClamp.y
+		};
+	}
 	void Destroy() { isAlive = false; }
 
 	Vector2 GetVelocity() const { return velocity; }

@@ -20,6 +20,10 @@ private:
 
 	std::vector<Asteroid*> asteroids;
 
+	int score = 0;
+	bool started = false;
+	bool gameOver = false;
+
 
 public:
 

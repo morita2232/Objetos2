@@ -27,6 +27,8 @@ protected:
 
 	SDL_Rect destination;
 
+	bool alive = true;
+
 public:
 
 	GameObject(SDL_Renderer* renderer, Vector2Int textureCoor, Vector2Int sizeToClamp);
@@ -35,6 +37,10 @@ public:
 	virtual void Update(float dt) = 0;
 	virtual void Render(SDL_Renderer* renderer);
 
+	bool IsAlive() const { return alive; }
+	void Kill() { alive = false; } // Sam, cuando el objeto muere asegurate que se llame a esta función para que todo funcione gucci
+
 	void Collider();
+	Vector2 GetPosition() const { return position; }
 
 };

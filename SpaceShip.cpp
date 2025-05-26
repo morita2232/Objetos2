@@ -4,6 +4,8 @@ SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(
 
 	input = inputManager;
 
+	position = Vector2(SCREENW / 2.0f, SCREENH / 2.0f);
+
 	//Velocidad actual
 	velocity = Vector2(0, 0);
 

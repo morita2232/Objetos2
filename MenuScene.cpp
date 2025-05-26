@@ -41,6 +41,11 @@ void MenuScene::Update(float dt) {
 				targetScene = "Credits"; // Aquí deberías comprobar cuál texto es
 				isFinished = true;
 			}
+
+			if (input->GetLeftClick() && text->GetText() == ">> 3 - High Scores") {
+				targetScene = "HighScores";
+				isFinished = true;
+			}
 		}
 		else {
 			// Si ya tenía ">>", lo quitamos
