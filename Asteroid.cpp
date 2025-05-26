@@ -4,15 +4,14 @@
 
 Asteroid::Asteroid(SDL_Renderer* renderer, AsteroidSize size, Vector2 pos, Vector2 vel)
 	: GameObject(renderer,
-		//LOCACION DEL SPRITE
-		(size == BIG) ? new Vector2Int(156, 0) :
-		(size == MEDIUM) ? new Vector2Int(160, 0) :
-		new Vector2Int(192, 0),
-		
-		//TAMAÑO DEL SPRITE
-		(size == BIG) ? new Vector2Int(101, 90) :
-		(size == MEDIUM) ? new Vector2Int(24, 24) :
-		new Vector2Int(16, 16))
+		(size == BIG) ? Vector2Int(156, 0) :
+		(size == MEDIUM) ? Vector2Int(160, 0) :
+		Vector2Int(192, 0),
+
+		(size == BIG) ? Vector2Int(101, 90) :
+		(size == MEDIUM) ? Vector2Int(24, 24) :
+		Vector2Int(16, 16))
+
 {
 	this->position = pos;
 	this->velocity = vel;

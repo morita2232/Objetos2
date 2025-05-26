@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(SDL_Renderer* renderer, Vector2Int* _textureCoor, Vector2Int* _sizeToClamp) {
+GameObject::GameObject(SDL_Renderer* renderer, Vector2Int _textureCoor, Vector2Int _sizeToClamp) {
 
 	//Posicion inicial
 	position = Vector2(50.f, 50.f);
@@ -12,10 +12,10 @@ GameObject::GameObject(SDL_Renderer* renderer, Vector2Int* _textureCoor, Vector2
 	scale = Vector2(1.f, 1.f);
 
 	//Coordenadas del spritesheet
-	textureCoor = *_textureCoor;
+	textureCoor = _textureCoor;
 
 	//Tamaño del sprite a recortar
-	sizeToClamp = *_sizeToClamp;
+	sizeToClamp = _sizeToClamp;
 
 	//Cargado de la imagen del spritesheet
 	SDL_Surface* surf = IMG_Load("resources/asteroids_spritesheet.png");
@@ -37,6 +37,14 @@ GameObject::GameObject(SDL_Renderer* renderer, Vector2Int* _textureCoor, Vector2
 	SDL_FreeSurface(surf);
 
 }
+
+GameObject::~GameObject() {
+	if (texture != nullptr) {
+		SDL_DestroyTexture(texture);
+		texture = nullptr;
+	}
+}
+
 
 void GameObject::Render(SDL_Renderer* renderer) {
 	//Definicion del area del sprite dentro del spritesheet

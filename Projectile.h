@@ -10,6 +10,7 @@ private:
     bool isAlive = true;
 
 public:
+
     Projectile(SDL_Renderer* renderer, Vector2 pos, float angleDegrees, float speed);
     bool IsAlive() const { return isAlive; }
     void Update(float dt) override;

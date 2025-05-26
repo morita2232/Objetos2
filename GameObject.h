@@ -29,7 +29,8 @@ protected:
 
 public:
 
-	GameObject(SDL_Renderer* renderer, Vector2Int* _textureCoor, Vector2Int* _sizeToClamp);
+	GameObject(SDL_Renderer* renderer, Vector2Int textureCoor, Vector2Int sizeToClamp);
+	virtual ~GameObject();
 
 	virtual void Update(float dt) = 0;
 	virtual void Render(SDL_Renderer* renderer);

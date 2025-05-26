@@ -2,7 +2,7 @@
 #include <cmath>
 
 Projectile::Projectile(SDL_Renderer* renderer, Vector2 pos, float angleDegrees, float speed)
-    : GameObject(renderer, new Vector2Int(112, 48), new Vector2Int(8, 8))
+    : GameObject(renderer, Vector2Int(112, 48), Vector2Int(8, 8))
 {
     //Posicion inicial desde donde se genera la bala
     position = pos;

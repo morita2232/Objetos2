@@ -1,6 +1,6 @@
 #include "SpaceShip.h"
 
-SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(rend, new Vector2Int(0, 0), new Vector2Int(30, 40)) {
+SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(rend, Vector2Int(0, 0), Vector2Int(30, 40)){
 
 	input = inputManager;
 

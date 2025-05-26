@@ -36,7 +36,6 @@ int SDL_main(int argc, char* argv[]) {
                 - 150 puntos por cada enemigo destruido
     */
 
-
 	//Se crea una instancia del juego en una ventana de 500 x 500
 	GameEngine myEngine(500, 500);
 
@@ -47,5 +46,4 @@ int SDL_main(int argc, char* argv[]) {
 	myEngine.Finish();
 
 	return 0;
-
 }
