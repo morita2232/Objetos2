@@ -146,18 +146,35 @@ void GamePlayScene::Update(float dt) {
 			if ((*a)->IsAlive() && (*p)->IsAlive()) {
 				SDL_Rect r2 = (*a)->GetCollider(); // Te explico abajo cómo crearlo
 
+				//Colisionan - if
 				if (SDL_HasIntersection(&r1, &r2)) {
-					// Destruir asteroide y bala
+					// Cogemos sus dimensiones, posicion y velocidad para cambiarlas luego
+					AsteroidSize size = (*a)->GetSize();
+					Vector2 pos = (*a)->GetPosition();
+					Vector2 vel = (*a)->GetVelocity();
+
+					// Ambos se destruyen
 					(*a)->Destroy();
-					(*p)->Kill(); // Necesitarás implementar esto igual que Destroy()
+					(*p)->Kill();
+
+					//Si el asteroide es grande o mediano, es decir, se tiene que partir en dos - if
+					if (size == BIG || size == MEDIUM) {
+						//Cogemos nuevo tamano con un operador
+						AsteroidSize newSize = (size == BIG) ? MEDIUM : SMALL;
+
+						// Se crean dos nuevos asteroides con dir y vel aleatoria
+						for (int i = 0; i < 2; ++i) {
+							// Dirección aleatoria
+							Vector2 newVel = Vector2((rand() % 100 - 50), (rand() % 100 - 50));
+							asteroids.push_back(new Asteroid(renderer, newSize, pos, newVel));
+						}
+					}
 
 					// Sumar puntuación según tamaño
-					AsteroidSize size = (*a)->GetSize();
 					if (size == BIG) score += 50;
 					else if (size == MEDIUM) score += 30;
 					else if (size == SMALL) score += 20;
 
-					// Actualizar texto del HUD
 					textObjects[0]->SetText("SCORE: " + std::to_string(score), renderer);
 
 					projectileUsed = true;
@@ -198,6 +215,7 @@ void GamePlayScene::Update(float dt) {
 		}
 	}
 
+	//ASTEROID VS SHIP
 	for (GameObject* obj : objects) {
 		SpaceShip* ship = dynamic_cast<SpaceShip*>(obj);
 		if (!ship || !ship->IsAlive()) continue;
@@ -208,7 +226,25 @@ void GamePlayScene::Update(float dt) {
 			SDL_Rect shipRect = ship->GetCollider(); // ver abajo
 			SDL_Rect asteroidRect = a->GetCollider();
 
+			//Si se ha colisionado con el jugador
 			if (SDL_HasIntersection(&shipRect, &asteroidRect)) {
+				// Primero tenemos que saber de que tamano es el asteroid colisionado:
+				AsteroidSize size = a->GetSize();
+
+				// Si es BIG o MEDIUM - if
+				if (size == BIG || size == MEDIUM) {
+
+					// Con un operador decidimos si este nuevo tamano es mediano o pequeno
+					AsteroidSize newSize = (size == BIG) ? MEDIUM : SMALL;
+
+					//Se crean nuevos asteroides que van a diferentes direcciones
+					for (int s = 0; s < 2; ++s) {
+						Vector2 newVel(rand() % 100 - 50, rand() % 100 - 50);
+						asteroids.push_back(new Asteroid(renderer, newSize, a->GetPosition(), newVel));
+					}
+				}
+				//Se destruye asteroide original
+				a->Destroy();
 				ship->Kill();
 				ScoreManager::AddScore(score);
 				gameOver = true;
@@ -234,8 +270,24 @@ void GamePlayScene::Update(float dt) {
 
 			//Si se tiene colision se destruyen ambos
 			if (SDL_HasIntersection(&enemyRect, &asteroidRect)) {
-				enemy->Kill();
+				// Primero tenemos que saber de que tamano es el asteroid colisionado:
+				AsteroidSize size = a->GetSize();
+
+				// Si es BIG o MEDIUM - if
+				if (size == BIG || size == MEDIUM) {
+
+					// Con un operador decidimos si este nuevo tamano es mediano o pequeno
+					AsteroidSize newSize = (size == BIG) ? MEDIUM : SMALL;
+
+					//Se crean nuevos asteroides que van a diferentes direcciones
+					for (int s = 0; s < 2; ++s) {
+						Vector2 newVel(rand() % 100 - 50, rand() % 100 - 50);
+						asteroids.push_back(new Asteroid(renderer, newSize, a->GetPosition(), newVel));
+					}
+				}
+				//Se destruye asteroide original y enemyShip
 				a->Destroy();
+				enemy->Kill();
 				break;
 			}
 		}

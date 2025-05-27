@@ -5,12 +5,12 @@
 Asteroid::Asteroid(SDL_Renderer* renderer, AsteroidSize size, Vector2 pos, Vector2 vel)
 	: GameObject(renderer,
 		(size == BIG) ? Vector2Int(156, 0) :
-		(size == MEDIUM) ? Vector2Int(160, 0) :
-		Vector2Int(192, 0),
+		(size == MEDIUM) ? Vector2Int(39, 0) :
+		Vector2Int(126, 0),
 
 		(size == BIG) ? Vector2Int(101, 90) :
-		(size == MEDIUM) ? Vector2Int(24, 24) :
-		Vector2Int(16, 16))
+		(size == MEDIUM) ? Vector2Int(39, 39) :
+		Vector2Int(21, 21))
 
 {
 	this->position = pos;
@@ -20,8 +20,8 @@ Asteroid::Asteroid(SDL_Renderer* renderer, AsteroidSize size, Vector2 pos, Vecto
 	// AJUSTE DE ESCALA
 	switch (size) {
 	case BIG:    scale = Vector2(1.5f, 1.5f); break;
-	case MEDIUM: scale = Vector2(1.0f, 1.0f); break;
-	case SMALL:  scale = Vector2(0.5f, 0.5f); break;
+	case MEDIUM: scale = Vector2(1.25f, 1.25f); break;
+	case SMALL:  scale = Vector2(1.0f, 1.0f); break;
 	}
 }
 
