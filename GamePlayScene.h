@@ -7,31 +7,27 @@
 class GamePlayScene : public Scene {
 private:
 
-	//Lista de las balas
+	// Balas disparadas
 	std::vector<Projectile*> projectiles;
 
-	//Puntero al renderer
+	// Renderer
 	SDL_Renderer* renderer;
 
-	//Tiempo minimo entre disparos
+	// Control de disparo
 	float shootCooldown = COOLDOWN;
-
-	//Control de cuando se puede volver a disparar
 	float shootTimer = NULL;
 
+	// Asteroides activos
 	std::vector<Asteroid*> asteroids;
 
-	// Para la creacion de los EnemyShips, anado un vector de estos
+	// Enemigos
 	std::vector<EnemyShip*> enemyShips;
-	// Temporizador para saber cuanto tardará en spawnear otro enemyShip
 	float enemySpawnTimer = 0.0f;
-	float enemySpawnInterval = 15.0f;
 
-	//Para la puntuacion
+	// Puntuación y estado del juego
 	int score = 0;
 	bool started = false;
 	bool gameOver = false;
-
 
 public:
 
@@ -40,5 +36,4 @@ public:
 	void Render(SDL_Renderer* rend) override;
 	void SpawnAsteroids(int count);
 	void Exit() override;
-
 };

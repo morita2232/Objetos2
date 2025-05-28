@@ -1,141 +1,121 @@
 #include "SpaceShip.h"
 
-SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(rend, Vector2Int(0, 0), Vector2Int(30, 40)){
+//CONSTRUCTOR: inicializa la nave del jugador con valores por defecto
+SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager)
+	: GameObject(rend, Vector2Int(0, 0), Vector2Int(30, 40)) // Sprite inicial
+{
+	input = inputManager;      // Referencia al gestor de input
 
-	input = inputManager;
+	lives = 3;                 // Número de vidas inicial
 
-	lives = 3;
+	// Posicionamos la nave en el centro de la pantalla
+	position = INITIAL_POSITION;
 
-	position = Vector2(SCREENW / 2.0f, SCREENH / 2.0f);
-
-	//Velocidad actual
-	velocity = Vector2(0, 0);
-
-	//Direccion en la que apunta la nave
-	direction = Vector2(0, 0);
-
-	//Intensidad de aceleracion
-	accelerationFactor = 400.0f;
-
-	//Resistencia del movimiento
-	linearDrag = 0.90f;
-
-	//Resistencia de la rotacion
-	angularDrag = 0.95f;
-
-	//Velocidad maxima
-	maxSpeed = 250.0f;
-
-	//Velocidad de rotacion
-	angularVelocity = 0.0f;
-
+	velocity = Vector2(0, 0);         // Velocidad inicial nula
+	direction = Vector2(0, 0);        // Dirección inicial
+	accelerationFactor = 400.0f;      // Aceleración al pulsar tecla
+	linearDrag = 0.90f;               // Resistencia al movimiento lineal
+	angularDrag = 0.95f;              // Resistencia al giro
+	angularVelocity = 0.0f;           // Velocidad de giro inicial
 }
 
+//UPDATE: se ejecuta cada frame, controla movimiento, giro, colisiones y respawn
 void SpaceShip::Update(float dt) {
 
-	//Constantes de pantalla para el wraparound
 	const float SCREEN_WIDTH = SCREENW;
 	const float SCREEN_HEIGHT = SCREENH;
 
-	//Calcular dirección desde la rotación
+	// Dirección basada en la rotación actual (convertida a radianes)
 	float radians = (zRotation - NINENTYDGS) * (M_PI / ONEEIGHTYDGS);
 	direction = Vector2(cos(radians), sin(radians));
 
-
-	//Aplicar aceleración si la flecha de arriba está presionada
+	// Si se pulsa la flecha hacia arriba, la nave acelera en su dirección actual
 	if (input->GetKey(SDLK_UP, HOLD)) {
 		velocity += direction * accelerationFactor * dt;
 	}
 
-	//Aplicar drag lineal al movimiento lineal
+	// Aplicamos resistencia al movimiento (drag)
 	velocity = velocity * pow(linearDrag, dt);
 
-	//Aplicar rotación si están la flecha izquierda o derecha presionadas
+	// Control de rotación con flechas izquierda y derecha
 	float angularSpeed = ANGULARSPD;
-
 	if (input->GetKey(SDLK_RIGHT, HOLD)) {
 		angularVelocity += angularSpeed * dt;
 	}
-
 	if (input->GetKey(SDLK_LEFT, HOLD)) {
 		angularVelocity -= angularSpeed * dt;
 	}
 
-	//Aplicar drag angular si no se esta girando
+	// Si no se está girando, se aplica el drag angular
 	if (!input->GetKey(SDLK_LEFT, HOLD) && !input->GetKey(SDLK_RIGHT, HOLD)) {
 		angularVelocity *= pow(angularDrag, dt);
 	}
 
-	//Limitar rotacion maxima
+	// Limitamos la velocidad angular máxima
 	const float maxAngularVelocity = ONEEIGHTYDGS;
 	if (angularVelocity > maxAngularVelocity)
 		angularVelocity = maxAngularVelocity;
 	else if (angularVelocity < -maxAngularVelocity)
 		angularVelocity = -maxAngularVelocity;
 
-	//Limitar velocidad lineal
+	// Limitamos la velocidad lineal máxima
 	float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-	if (speed > maxSpeed) {
-		velocity = (velocity * (1.0f / speed)) * maxSpeed;
+	if (speed > MAXSPEED) {
+		velocity = (velocity * (1.0f / speed)) * MAXSPEED;
 	}
 
-	//Actualizar posición y rotación
+	// Aplicamos el movimiento y la rotación
 	position += velocity * dt;
 	zRotation += angularVelocity * dt;
 
-	// --- Lógica de respawn/parpadeo ---
+	// Lógica de respawn y parpadeo tras perder una vida
 	if (respawning) {
 		respawnTimer += dt;
 		blinkTimer += dt;
 
-		// Alternar visibilidad para el efecto parpadeo
-		if (blinkTimer >= blinkInterval) {
+		// Hace que la nave parpadee alternando visibilidad
+		if (blinkTimer >= BLINK_INTERVAL) {
 			visible = !visible;
 			blinkTimer = 0.0f;
 		}
 
-		// Fin del estado de respawn
-		if (respawnTimer >= respawnDuration) {
+		// Si termina el tiempo de respawn, vuelve a la normalidad
+		if (respawnTimer >= RESPAWN_DURATION) {
 			respawning = false;
 			visible = true;
 		}
 	}
 
-
-	//Wrap de pantalla
+	// Wraparound de pantalla: si se sale por un borde, aparece por el contrario
 	if (position.x < -sizeToClamp.x) position.x = SCREEN_WIDTH;
-	if (position.x > SCREEN_WIDTH) position.x = -sizeToClamp.x;
+	if (position.x > SCREEN_WIDTH)   position.x = -sizeToClamp.x;
 	if (position.y < -sizeToClamp.y) position.y = SCREEN_HEIGHT;
-	if (position.y > SCREEN_HEIGHT) position.y = -sizeToClamp.y;
+	if (position.y > SCREEN_HEIGHT)  position.y = -sizeToClamp.y;
 }
 
+//RENDER: solo dibuja la nave si está visible (por ejemplo, no en parpadeo de respawn)
 void SpaceShip::Render(SDL_Renderer* renderer) {
-	if (!visible) {
-
-		return;
-	}
-
-
+	if (!visible) return;
 	GameObject::Render(renderer);
 }
 
+//StartRespawn: inicia el estado de respawn (tras perder vida)
 void SpaceShip::StartRespawn() {
 	respawning = true;
 	respawnTimer = 0.0f;
 	blinkTimer = 0.0f;
 	visible = false;
 
-	// Reposicionar en el centro de la pantalla
-	position = Vector2(SCREENW / 2.0f, SCREENH / 2.0f);
+	// Reposicionamos al centro de la pantalla
+	position = INITIAL_POSITION;
 
-	// Reiniciar movimiento
+	// Reiniciamos velocidad y rotación
 	velocity = Vector2(0, 0);
 	angularVelocity = 0.0f;
-
-	// Reiniciar rotación
 	zRotation = 0.0f;
 }
 
+//IsRespawning: devuelve si la nave está actualmente en respawn
 bool SpaceShip::IsRespawning() const {
 	return respawning;
 }

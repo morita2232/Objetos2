@@ -3,46 +3,42 @@
 #include <map>
 #include "Utils.h"
 
-//Estados de las teclas
+// Estados posibles de una tecla
 enum KeyState { EMPTY, DOWN, UP, HOLD };
 
-//Macro para instanciar facilmente un InputManager
+// Macro para acceder rápidamente al InputManager global
 #define IM InputManager::Instance()
 
 class InputManager {
 
 private:
 
-	//Mapa de teclas que guarda su estado 
+	// Mapa que asocia cada tecla con su estado actual
 	std::map<Sint32, KeyState> keys;
 
-	//Posicion del mouse en pantalla
+	// Posición actual del ratón
 	Vector2Int mousePos;
 
-	//Estado del boton izquierdo del raton
+	// Estado del botón izquierdo del ratón
 	bool leftClick = false;
 
-	//Indicacion de si se tiene que acabar el juego
+	// Indica si se ha solicitado cerrar el juego
 	bool quitGame = false;
-
 
 public:
 
-	//Devuelve una unica instancia global del InputManager
+	// Devuelve la instancia única del InputManager
 	static InputManager& Instance() {
-
 		static InputManager manager;
-
 		return manager;
-
 	}
 
+	// Getters simples
 	Vector2Int GetMousePos() { return mousePos; }
-
 	bool GetQuit() { return quitGame; }
-
 	bool GetLeftClick() { return leftClick; }
 
+	// Devuelve si una tecla está en el estado indicado
 	bool GetKey(Sint32 key, KeyState state) {
 		auto it = keys.find(key);
 		if (it != keys.end()) {
@@ -51,7 +47,6 @@ public:
 		return false;
 	}
 
-
+	// Procesa los eventos de SDL
 	void Listen();
-
 };

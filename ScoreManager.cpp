@@ -53,10 +53,10 @@ void ScoreManager::AddScore(int score) {
 	std::sort(scores.begin(), scores.end(), std::greater<int>());
 
 	if (scores.size() > 10) {
-		scores.resize(10); //Solo las 10 mejores
+		scores.resize(10);
 	}
 
-	SaveToFile(); //Guardamos el resultado
+	SaveToFile();
 }
 
 //Devuelve la lista de puntuaciones ordenadas

@@ -10,48 +10,47 @@
 class Scene {
 protected:
 
-	//Lista de objetos en escena
-	std::vector <GameObject*> objects;
+	// Objetos del juego
+	std::vector<GameObject*> objects;
 
-	//Lista de objetos de texto
-	std::vector <UIText*> textObjects;
+	// Textos en pantalla
+	std::vector<UIText*> textObjects;
 
-	//Nombre de la escena
+	// Nombre de la siguiente escena
 	std::string targetScene;
 
+	// Input del jugador
 	InputManager* input;
 
-	//Indica si la escena ha acabdo
+	// Marca si la escena ha terminado
 	bool isFinished = true;
 
 public:
 
+	// Inicializa escena
 	virtual void Start(SDL_Renderer* rend, InputManager* inputManager) {
-
 		isFinished = false;
 		input = inputManager;
-
 	}
 
+	// Actualiza objetos
 	virtual void Update(float dt) {
-		//Actualiza los objetos en escena
 		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->Update(dt);
 		}
-
 	}
 
+	// Renderiza objetos
 	virtual void Render(SDL_Renderer* rend) {
-		//Renderiza los objetos
-		for (int i = 0; i < objects.size(); i++) {		
+		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->Render(rend);
 		}
-
 	}
 
+	// Limpieza obligatoria al salir
 	virtual void Exit() = 0;
 
+	// Accesores
 	bool IsFinished() { return isFinished; }
 	std::string GetTargetScene() { return targetScene; }
-
 };

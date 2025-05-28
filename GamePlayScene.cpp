@@ -2,20 +2,23 @@
 #include "SpaceShip.h"
 #include "ScoreManager.h"
 
+//START: se ejecuta al iniciar la escena de juego
 void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
+
 	Scene::Start(rend, inputManager);
 
-	// Reinicio de estado
+	// Reiniciamos cualquier texto previo de sesiones anteriores
 	for (UIText* txt : textObjects) {
 		delete txt;
 	}
 	textObjects.clear();
 
-	started = false;
-	gameOver = false;
-	score = 0;
+	// Variables de estado inicial
+	started = false;       // aún no ha comenzado el juego (espera input)
+	gameOver = false;      // el jugador aún no ha perdido
+	score = 0;             // puntuación inicial
 
-	//Dejamos todos los vectores preparados y vacios para empezar
+	// Vaciado y liberación de todos los vectores que contienen objetos del juego
 	for (Projectile* p : projectiles) delete p;
 	projectiles.clear();
 
@@ -25,15 +28,18 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	for (EnemyShip* e : enemyShips) delete e;
 	enemyShips.clear();
 
+	// Guardamos el renderer para uso posterior
 	renderer = rend;
 
-	//Creacion de una nave
+	// Creamos una nueva nave del jugador y la añadimos al vector de objetos
 	objects.push_back(new SpaceShip(rend, &IM));
 
-	//Textos de inicio
+	// Textos
 	textObjects.push_back(new UIText(rend, Vector2(100, 40), Vector2(1.f, 1.f), 0.0f, "SCORE: 0"));
+
 	textObjects.push_back(new UIText(rend, Vector2(255, 70), Vector2(1.f, 1.f), 0.0f, "PRESS ARROW KEY TO START"));
 }
+
 
 
 void GamePlayScene::Update(float dt) {
@@ -57,7 +63,7 @@ void GamePlayScene::Update(float dt) {
 		enemySpawnTimer += dt;
 
 		//Ha llegado al tiempo indicado - if
-		if (enemySpawnTimer >= enemySpawnInterval) {
+		if (enemySpawnTimer >= ENEMY_SPAWN_INTERVAL) {
 
 			// Posicion de spawn random entre las dimensiones del mapa
 			float randScreenW = rand() % (int)SCREENW;
@@ -139,7 +145,7 @@ void GamePlayScene::Update(float dt) {
 	// Colisión entre balas y asteroides
 	for (auto p = projectiles.begin(); p != projectiles.end(); ) {
 		bool projectileUsed = false;
-		SDL_Rect r1 = { (int)(*p)->GetPosition().x, (int)(*p)->GetPosition().y, 8, 8 };
+		SDL_Rect r1 = { (int)(*p)->GetPosition().x, (int)(*p)->GetPosition().y, PROJECTILE_SIZE, PROJECTILE_SIZE };
 
 		// ASTEROIDES
 		for (auto a = asteroids.begin(); a != asteroids.end(); ++a) {
@@ -165,15 +171,15 @@ void GamePlayScene::Update(float dt) {
 						// Se crean dos nuevos asteroides con dir y vel aleatoria
 						for (int i = 0; i < 2; ++i) {
 							// Dirección aleatoria
-							Vector2 newVel = Vector2((rand() % 100 - 50), (rand() % 100 - 50));
+							Vector2 newVel = Vector2((DIRECTION_RAND), (DIRECTION_RAND));
 							asteroids.push_back(new Asteroid(renderer, newSize, pos, newVel));
 						}
 					}
 
 					// Sumar puntuación según tamaño
-					if (size == BIG) score += 50;
-					else if (size == MEDIUM) score += 30;
-					else if (size == SMALL) score += 20;
+					if (size == BIG) score += SCORE_BIG_ASTEROID;
+					else if (size == MEDIUM) score += SCORE_MEDIUM_ASTEROID;
+					else if (size == SMALL) score += SCORE_SMALL_ASTEROID;
 
 					textObjects[0]->SetText("SCORE: " + std::to_string(score), renderer);
 
@@ -198,7 +204,7 @@ void GamePlayScene::Update(float dt) {
 					projectileUsed = true;
 
 					//Se actualiza score (+150 puntos!)
-					score += 150;
+					score += SCORE_ENEMY;
 					textObjects[0]->SetText("SCORE: " + std::to_string(score), renderer);
 					break;
 				}
@@ -217,60 +223,45 @@ void GamePlayScene::Update(float dt) {
 
 	//ASTEROID VS SHIP
 	for (GameObject* obj : objects) {
+		// Comprobamos que el objeto sea una nave y esté viva
 		SpaceShip* ship = dynamic_cast<SpaceShip*>(obj);
-		if (!ship) continue; // No es una nave, saltamos
-
+		if (!ship) continue;
 		if (ship->IsRespawning()) continue;
+		if (!ship->IsAlive()) continue;
 
-		if (!ship || !ship->IsAlive()) continue;
-
+		// Comprobamos colisiones con todos los asteroides vivos
 		for (Asteroid* a : asteroids) {
 			if (!a->IsAlive()) continue;
 
-			SDL_Rect shipRect = ship->GetCollider(); // ver abajo
-
-			int shipLives = ship->GetLives();
-
+			// Obtenemos las áreas de colisión de la nave y el asteroide
+			SDL_Rect shipRect = ship->GetCollider();
 			SDL_Rect asteroidRect = a->GetCollider();
 
-			//Si se ha colisionado con el jugador
+			// Si hay colisión entre nave y asteroide
 			if (SDL_HasIntersection(&shipRect, &asteroidRect)) {
-				
-				/*// Primero tenemos que saber de que tamano es el asteroid colisionado:
-				AsteroidSize size = a->GetSize();
 
-				// Si es BIG o MEDIUM - if
-				if (size == BIG || size == MEDIUM) {
-
-					// Con un operador decidimos si este nuevo tamano es mediano o pequeno
-					AsteroidSize newSize = (size == BIG) ? MEDIUM : SMALL;
-
-					//Se crean nuevos asteroides que van a diferentes direcciones
-					for (int s = 0; s < 2; ++s) {
-						Vector2 newVel(rand() % 100 - 50, rand() % 100 - 50);
-						asteroids.push_back(new Asteroid(renderer, newSize, a->GetPosition(), newVel));
-					}
-				}
-				*/
-
+				// Restamos una vida a la nave
 				ship->MinusLives();
+				int shipLives = ship->GetLives();
 
+				// Si ya no quedan vidas, la nave muere y se acaba el juego
 				if (shipLives == 0) {
 					a->Destroy();
 					ship->Kill();
 					ScoreManager::AddScore(score);
 					gameOver = true;
+
+					// Mostramos mensaje de fin de partida
 					textObjects.push_back(new UIText(renderer, Vector2(140, 200), Vector2(1.5f, 1.5f), 0.0f, "YOU LOSE"));
 					textObjects.push_back(new UIText(renderer, Vector2(100, 240), Vector2(1.f, 1.f), 0.0f, "PRESS R TO RETURN"));
 				}
 				else {
-				//Se destruye asteroide original
+					// Si aún tiene vidas, solo destruimos el asteroide y activamos el respawn de la nave
 					a->Destroy();
 					ship->StartRespawn();
-
 				}
 
-				break;
+				break; // Rompemos para evitar múltiples colisiones simultáneas
 			}
 		}
 	}
@@ -301,7 +292,7 @@ void GamePlayScene::Update(float dt) {
 
 					//Se crean nuevos asteroides que van a diferentes direcciones
 					for (int s = 0; s < 2; ++s) {
-						Vector2 newVel(rand() % 100 - 50, rand() % 100 - 50);
+						Vector2 newVel(DIRECTION_RAND, DIRECTION_RAND);
 						asteroids.push_back(new Asteroid(renderer, newSize, a->GetPosition(), newVel));
 					}
 				}
@@ -385,20 +376,24 @@ void GamePlayScene::Render(SDL_Renderer* rend) {
 	}
 }
 
+//SpawnAsteroids: genera asteroides grandes en posiciones aleatorias alejadas del centro
 void GamePlayScene::SpawnAsteroids(int count) {
 	for (int i = 0; i < count; ++i) {
 		Vector2 pos;
-		float minDistance = 100.0f; // distancia mínima respecto al centro
+		float minDistance = 100.0f; // Distancia mínima desde el centro de la pantalla
 
+		// Generamos una posición aleatoria que esté suficientemente lejos del centro
 		do {
 			pos = Vector2(rand() % (int)SCREENW, rand() % (int)SCREENH);
-		} while ((pos - Vector2(SCREENW / 2.0f, SCREENH / 2.0f)).Magnitude() < minDistance);
+		} while ((pos - INITIAL_POSITION).Magnitude() < minDistance);
 
-		Vector2 vel((rand() % 100 - 50), (rand() % 100 - 50));
+		// Generamos una velocidad aleatoria para el asteroide
+		Vector2 vel((VELOCITY_RAND), (VELOCITY_RAND));
+
+		// Creamos el asteroide de tipo BIG y lo añadimos al vector
 		asteroids.push_back(new Asteroid(renderer, BIG, pos, vel));
 	}
 }
-
 
 void GamePlayScene::Exit() {
 
@@ -414,7 +409,7 @@ void GamePlayScene::Exit() {
 	}
 	objects.clear();
 
-	//Liberaciond e memoria de enemyShips
+	//Liberacion de memoria de enemyShips
 	for (EnemyShip* e : enemyShips) {
 		delete e;
 	}

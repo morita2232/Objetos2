@@ -6,48 +6,46 @@
 class SpaceShip : public GameObject {
 private:
 
-	//Velocidad actual de la nave
+	// Movimiento
 	Vector2 velocity;
-
-	//Direccion hacia donde apunta la nave
 	Vector2 direction;
-
-	//Velocidad de rotacion
 	float angularVelocity;
 
-	//Friccion que desacelera la nave progresivamente
+	// Fricciones
 	float linearDrag;
-
-	//Friccion que desacelera la rotacion
 	float angularDrag;
 
-	//Limite de velocidad
-	float maxSpeed;
-
-	//Guarda cuanta aceleracion se aplica
+	// Velocidades
 	float accelerationFactor;
 
+	// Input del jugador
 	InputManager* input;
 
+	// Vidas del jugador
 	int lives;
 
-	//RESPAWN
+	// Estado de respawn
 	bool respawning = false;
 	float respawnTimer = 0.0f;
-	float respawnDuration = 3.0f;
 	bool visible = true;
 	float blinkTimer = 0.0f;
-	float blinkInterval = 0.2f;
-
 
 public:
 
+	// Constructor
 	SpaceShip(SDL_Renderer* renderer, InputManager* inputManager);
 
+	// Dibujo
 	void Render(SDL_Renderer* renderer) override;
 
+	// Movimiento y lógica
+	void Update(float dt) override;
+
+	// Getters
 	Vector2 GetPosition() const { return position; }
 	float GetRotation() const { return zRotation; }
+
+	// Colisión
 	SDL_Rect GetCollider() const {
 		return SDL_Rect{
 			(int)(position.x),
@@ -57,16 +55,11 @@ public:
 		};
 	}
 
+	// Vidas
 	int GetLives() { return lives; }
-
 	int MinusLives() { lives -= 1; return lives; }
 
-
-	//RESPAWN
+	// Respawn
 	void StartRespawn();
 	bool IsRespawning() const;
-
-	void Update(float dt) override;
-
 };
-

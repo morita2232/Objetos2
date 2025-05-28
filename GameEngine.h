@@ -12,18 +12,25 @@ class GameEngine {
 
 public:
 
-	//Puntero a la ventana
+	// Puntero a la ventana principal
 	SDL_Window* window;
 
-	//Puntero al renderer
+	// Puntero al renderer asociado a la ventana
 	SDL_Renderer* renderer;
 
+	// Constructor
 	GameEngine(int windowWidth, int windowHeight);
 
+	// Bucle principal
 	void Updater();
+
+	// Cierre del motor
 	void Finish();
 
+	// Inicializa SDL
 	void InitSDL();
-	void InitWindowAndRenderer(int windowWidth, int windowHeight);
 
+	// Crea la ventana y el renderer
+	void InitWindowAndRenderer(int windowWidth, int windowHeight);
 };
+

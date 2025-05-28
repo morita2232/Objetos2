@@ -3,20 +3,29 @@
 
 class Projectile : public GameObject {
 private:
-    //Velocidad y direccion del proyectil
+
+    // Dirección y velocidad
     Vector2 velocity;
 
-    //Variable para saber si la bala esta viva o no
+    // Estado de vida
     bool isAlive = true;
 
 public:
 
+    // Constructor
     Projectile(SDL_Renderer* renderer, Vector2 pos, float angleDegrees, float speed);
+
+    // Getters y lógica de vida
     bool IsAlive() const { return isAlive; }
-    void Update(float dt) override;
-    void Render(SDL_Renderer* renderer) override;
     void Kill() { isAlive = false; }
 
+    // Actualiza posición
+    void Update(float dt) override;
+
+    // Dibuja el proyectil
+    void Render(SDL_Renderer* renderer) override;
+
+    // Área de colisión
     SDL_Rect GetCollider() const {
         return SDL_Rect{
             (int)(position.x),
@@ -25,6 +34,4 @@ public:
             sizeToClamp.y
         };
     }
-
 };
-

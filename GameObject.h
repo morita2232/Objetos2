@@ -7,40 +7,47 @@
 class GameObject {
 protected:
 
-	//Posicion del objeto
+	// Posición en pantalla
 	Vector2 position;
 
-	//Escala del objeto
+	// Escala del objeto
 	Vector2 scale;
 
-	//Rotacion del objeto
+	// Rotación en grados
 	float zRotation;
 
-	//Textura del objeto
+	// Textura del sprite
 	SDL_Texture* texture;
 
-	//Coordenadas del sprite en el spritesheet
+	// Coordenadas dentro del spritesheet
 	Vector2Int textureCoor;
 
-	//Tamaño del sprite a recortar
+	// Tamaño del sprite recortado
 	Vector2Int sizeToClamp;
 
+	// Rectángulo de destino para render
 	SDL_Rect destination;
 
+	// Estado de vida
 	bool alive = true;
 
 public:
 
+	// Constructor y destructor
 	GameObject(SDL_Renderer* renderer, Vector2Int textureCoor, Vector2Int sizeToClamp);
 	virtual ~GameObject();
 
+	// Métodos virtuales a implementar
 	virtual void Update(float dt) = 0;
 	virtual void Render(SDL_Renderer* renderer);
 
+	// Getters y lógica de vida
 	bool IsAlive() const { return alive; }
-	void Kill() { alive = false; } // Sam, cuando el objeto muere asegurate que se llame a esta función para que todo funcione gucci
+	void Kill() { alive = false; } // Marca el objeto como muerto
 
+	// Cálculo del área de colisión
 	void Collider();
-	Vector2 GetPosition() const { return position; }
 
+	// Devuelve la posición
+	Vector2 GetPosition() const { return position; }
 };
