@@ -2,7 +2,9 @@
 #include <cmath>
 
 EnemyShip::EnemyShip(SDL_Renderer* rend, Vector2 pos)
-	: GameObject(rend, Vector2Int(0,0), Vector2Int(30, 40)) {
+	: GameObject(rend, Vector2Int(195,93), Vector2Int(255, 125)) {
+	
+	scale = Vector2(0.25f, 0.25f);
 
 	position = pos;
 	speed = 150.0f;
@@ -12,7 +14,6 @@ EnemyShip::EnemyShip(SDL_Renderer* rend, Vector2 pos)
 	float randY = rand() % 100 - 50;
 
 	velocity = Vector2(randX, randY);
-
 }
 
 void EnemyShip::Update(float dt) {
@@ -35,7 +36,8 @@ SDL_Rect EnemyShip::GetCollider() {
 	return SDL_Rect{
 		(int)position.x,
 		(int)position.y,
-		sizeToClamp.x,
-		sizeToClamp.y
+		//Se multiplica por la escala para que se ajuste al tamano dado
+		(int)(sizeToClamp.x * scale.x),
+		(int)(sizeToClamp.y * scale.y)
 	};
 }
