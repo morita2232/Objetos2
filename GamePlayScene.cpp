@@ -23,7 +23,7 @@ void GamePlayScene::Start(SDL_Renderer* rend, InputManager* inputManager) {
 	asteroids.clear();
 
 	for (EnemyShip* e : enemyShips) delete e;
-	asteroids.clear();
+	enemyShips.clear();
 
 	renderer = rend;
 
@@ -218,17 +218,25 @@ void GamePlayScene::Update(float dt) {
 	//ASTEROID VS SHIP
 	for (GameObject* obj : objects) {
 		SpaceShip* ship = dynamic_cast<SpaceShip*>(obj);
+		if (!ship) continue; // No es una nave, saltamos
+
+		if (ship->IsRespawning()) continue;
+
 		if (!ship || !ship->IsAlive()) continue;
 
 		for (Asteroid* a : asteroids) {
 			if (!a->IsAlive()) continue;
 
 			SDL_Rect shipRect = ship->GetCollider(); // ver abajo
+
+			int shipLives = ship->GetLives();
+
 			SDL_Rect asteroidRect = a->GetCollider();
 
 			//Si se ha colisionado con el jugador
 			if (SDL_HasIntersection(&shipRect, &asteroidRect)) {
-				// Primero tenemos que saber de que tamano es el asteroid colisionado:
+				
+				/*// Primero tenemos que saber de que tamano es el asteroid colisionado:
 				AsteroidSize size = a->GetSize();
 
 				// Si es BIG o MEDIUM - if
@@ -243,13 +251,25 @@ void GamePlayScene::Update(float dt) {
 						asteroids.push_back(new Asteroid(renderer, newSize, a->GetPosition(), newVel));
 					}
 				}
+				*/
+
+				ship->MinusLives();
+
+				if (shipLives == 0) {
+					a->Destroy();
+					ship->Kill();
+					ScoreManager::AddScore(score);
+					gameOver = true;
+					textObjects.push_back(new UIText(renderer, Vector2(140, 200), Vector2(1.5f, 1.5f), 0.0f, "YOU LOSE"));
+					textObjects.push_back(new UIText(renderer, Vector2(100, 240), Vector2(1.f, 1.f), 0.0f, "PRESS R TO RETURN"));
+				}
+				else {
 				//Se destruye asteroide original
-				a->Destroy();
-				ship->Kill();
-				ScoreManager::AddScore(score);
-				gameOver = true;
-				textObjects.push_back(new UIText(renderer, Vector2(140, 200), Vector2(1.5f, 1.5f), 0.0f, "YOU LOSE"));
-				textObjects.push_back(new UIText(renderer, Vector2(100, 240), Vector2(1.f, 1.f), 0.0f, "PRESS R TO RETURN"));
+					a->Destroy();
+					ship->StartRespawn();
+
+				}
+
 				break;
 			}
 		}

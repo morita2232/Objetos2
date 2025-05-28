@@ -4,6 +4,8 @@ SpaceShip::SpaceShip(SDL_Renderer* rend, InputManager* inputManager):GameObject(
 
 	input = inputManager;
 
+	lives = 3;
+
 	position = Vector2(SCREENW / 2.0f, SCREENH / 2.0f);
 
 	//Velocidad actual
@@ -81,9 +83,59 @@ void SpaceShip::Update(float dt) {
 	position += velocity * dt;
 	zRotation += angularVelocity * dt;
 
+	// --- Lógica de respawn/parpadeo ---
+	if (respawning) {
+		respawnTimer += dt;
+		blinkTimer += dt;
+
+		// Alternar visibilidad para el efecto parpadeo
+		if (blinkTimer >= blinkInterval) {
+			visible = !visible;
+			blinkTimer = 0.0f;
+		}
+
+		// Fin del estado de respawn
+		if (respawnTimer >= respawnDuration) {
+			respawning = false;
+			visible = true;
+		}
+	}
+
+
 	//Wrap de pantalla
 	if (position.x < -sizeToClamp.x) position.x = SCREEN_WIDTH;
 	if (position.x > SCREEN_WIDTH) position.x = -sizeToClamp.x;
 	if (position.y < -sizeToClamp.y) position.y = SCREEN_HEIGHT;
 	if (position.y > SCREEN_HEIGHT) position.y = -sizeToClamp.y;
+}
+
+void SpaceShip::Render(SDL_Renderer* renderer) {
+	if (!visible) {
+
+		return;
+	}
+
+
+	GameObject::Render(renderer);
+}
+
+void SpaceShip::StartRespawn() {
+	respawning = true;
+	respawnTimer = 0.0f;
+	blinkTimer = 0.0f;
+	visible = false;
+
+	// Reposicionar en el centro de la pantalla
+	position = Vector2(SCREENW / 2.0f, SCREENH / 2.0f);
+
+	// Reiniciar movimiento
+	velocity = Vector2(0, 0);
+	angularVelocity = 0.0f;
+
+	// Reiniciar rotación
+	zRotation = 0.0f;
+}
+
+bool SpaceShip::IsRespawning() const {
+	return respawning;
 }

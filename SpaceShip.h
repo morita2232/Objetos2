@@ -29,9 +29,22 @@ private:
 
 	InputManager* input;
 
+	int lives;
+
+	//RESPAWN
+	bool respawning = false;
+	float respawnTimer = 0.0f;
+	float respawnDuration = 3.0f;
+	bool visible = true;
+	float blinkTimer = 0.0f;
+	float blinkInterval = 0.2f;
+
+
 public:
 
 	SpaceShip(SDL_Renderer* renderer, InputManager* inputManager);
+
+	void Render(SDL_Renderer* renderer) override;
 
 	Vector2 GetPosition() const { return position; }
 	float GetRotation() const { return zRotation; }
@@ -43,6 +56,15 @@ public:
 			sizeToClamp.y
 		};
 	}
+
+	int GetLives() { return lives; }
+
+	int MinusLives() { lives -= 1; return lives; }
+
+
+	//RESPAWN
+	void StartRespawn();
+	bool IsRespawning() const;
 
 	void Update(float dt) override;
 

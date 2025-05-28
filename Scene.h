@@ -43,7 +43,7 @@ public:
 
 	virtual void Render(SDL_Renderer* rend) {
 		//Renderiza los objetos
-		for (int i = 0; i < objects.size(); i++) {
+		for (int i = 0; i < objects.size(); i++) {		
 			objects[i]->Render(rend);
 		}
 
